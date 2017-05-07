@@ -67,14 +67,6 @@ func (bot *BotAPI) MakeRequest(endpoint string, params url.Values) (APIResponse,
 	}
 	defer resp.Body.Close()
 
-	if resp.StatusCode == http.StatusForbidden {
-		return APIResponse{}, errors.New(ErrAPIForbidden)
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return APIResponse{}, errors.New(http.StatusText(resp.StatusCode))
-	}
-
 	bytes, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
 		return APIResponse{}, err
@@ -85,7 +77,18 @@ func (bot *BotAPI) MakeRequest(endpoint string, params url.Values) (APIResponse,
 	}
 
 	var apiResp APIResponse
-	json.Unmarshal(bytes, &apiResp)
+	err = json.Unmarshal(bytes, &apiResp)
+	if err != nil {
+		return APIResponse{}, err
+	}
+
+	if resp.StatusCode == http.StatusForbidden {
+		return apiResp, errors.New(ErrAPIForbidden)
+	}
+
+	if resp.StatusCode != http.StatusOK {
+		return apiResp, errors.New(http.StatusText(resp.StatusCode))
+	}
 
 	if !apiResp.Ok {
 		return apiResp, errors.New(apiResp.Description)
