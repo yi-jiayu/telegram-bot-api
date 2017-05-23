@@ -49,10 +49,11 @@ func (ch UpdatesChannel) Clear() {
 
 // User is a user on Telegram.
 type User struct {
-	ID        int    `json:"id"`
-	FirstName string `json:"first_name"`
-	LastName  string `json:"last_name"` // optional
-	UserName  string `json:"username"`  // optional
+	ID           int    `json:"id"`
+	FirstName    string `json:"first_name"`
+	LastName     string `json:"last_name"`     // optional
+	UserName     string `json:"username"`      // optional
+	LanguageCode string `json:"language_code"` // optional
 }
 
 // String displays a simple text version of a user.
@@ -135,6 +136,7 @@ type Message struct {
 	Photo                 *[]PhotoSize     `json:"photo"`                   // optional
 	Sticker               *Sticker         `json:"sticker"`                 // optional
 	Video                 *Video           `json:"video"`                   // optional
+	VideoNote             *VideoNote       `json:"video_note"`              // optional
 	Voice                 *Voice           `json:"voice"`                   // optional
 	Caption               string           `json:"caption"`                 // optional
 	Contact               *Contact         `json:"contact"`                 // optional
@@ -260,6 +262,15 @@ type Video struct {
 	Duration  int        `json:"duration"`
 	Thumbnail *PhotoSize `json:"thumb"`     // optional
 	MimeType  string     `json:"mime_type"` // optional
+	FileSize  int        `json:"file_size"` // optional
+}
+
+// VideoNote contains information about a video.
+type VideoNote struct {
+	FileID    string     `json:"file_id"`
+	Length    int        `json:"length"`
+	Duration  int        `json:"duration"`
+	Thumbnail *PhotoSize `json:"thumb"`     // optional
 	FileSize  int        `json:"file_size"` // optional
 }
 
